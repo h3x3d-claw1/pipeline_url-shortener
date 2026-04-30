@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pydantic[email]
+prometheus_client
+pytest
+pytest-cov
+httpx
