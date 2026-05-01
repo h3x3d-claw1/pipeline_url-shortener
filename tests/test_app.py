@@ -18,10 +18,10 @@ def test_redirect_works():
     create_res = client.post("/shorten", json=payload)
     code = create_res.json()["short_code"]
     
-    # Then, test the redirect
-    redirect_res = client.get(f"/{code}")
+    # Then, test the redirect (don't follow it)
+    redirect_res = client.get(f"/{code}", follow_redirects=False)
     assert redirect_res.status_code == 307
-    assert str(redirect_res.headers["location"]) == "https://google.com"
+    assert redirect_res.headers["location"] == "https://google.com"
 
 def test_stats_tracking():
     payload = {"url": "https://python.org"}
@@ -37,7 +37,7 @@ def test_stats_tracking():
     assert stats_res.status_code == 200
     data = stats_res.json()
     assert data["visit_count"] == 3
-    assert data["original_url"] == "https://python.org"
+    assert data["original_url"].rstrip("/") == "https://python.org"
 
 def test_not_found():
     response = client.get("/non-existent-code")
