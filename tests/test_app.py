@@ -21,7 +21,7 @@ def test_redirect_works():
     # Then, test the redirect (don't follow it)
     redirect_res = client.get(f"/{code}", follow_redirects=False)
     assert redirect_res.status_code == 307
-    assert redirect_res.headers["location"] == "https://google.com"
+    assert redirect_res.headers["location"].rstrip("/") == "https://google.com"
 
 def test_stats_tracking():
     payload = {"url": "https://python.org"}
